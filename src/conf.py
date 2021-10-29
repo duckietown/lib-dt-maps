@@ -3,9 +3,9 @@ import os
 
 # -- Project information -----------------------------------------------------
 
-project = "Duckietown Pondcleaner"
+project = "Duckietown Maps"
 copyright = "Duckietown"
-author = "Mack"
+author = "Andrea F. Daniele"
 
 # -- General configuration ---------------------------------------------------
 

@@ -36,7 +36,7 @@ We have the following features:
 
 ## Anatomy of the repo
 
-This repository describes a library called "`duckietown_pondcleaner`" and there is one command-line tool
+This repository describes a library called "`dt_maps`" and there is one command-line tool
 called `dt-pc-demo.`
 
 *Warning*: Do not remove files/features just because you don't understand. Ask instead.
@@ -66,11 +66,11 @@ See: [Chesterson's fence](https://en.wikipedia.org/wiki/Wikipedia:Chesterton%27s
 
 * `src/` - This is the path that you should set as "sources root" in your tool
 
-* `src/duckietown_pondcleaner`: Contains the code.
+* `src/dt_maps`: Contains the code.
 
-* `src/duckietown_pondcleaner/__init__.py`: Contains the `__version__` library.
+* `src/dt_maps/__init__.py`: Contains the `__version__` library.
 
-* `src/duckietown_pondcleaner_tests`: Contains the tests - not included in the egg.
+* `src/dt_maps_tests`: Contains the tests - not included in the egg.
 
 ### Docker testing
 
@@ -86,7 +86,7 @@ These are files to build and run a testing container.
 
 * `src/index.rst`: Sphinx main file
 
-* `src/duckietown_pondcleaner/index.rst`: Documentation for the package
+* `src/dt_maps/index.rst`: Documentation for the package
 
 
 ### Coverage

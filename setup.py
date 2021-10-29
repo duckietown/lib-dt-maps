@@ -3,13 +3,13 @@ from setuptools import find_packages, setup
 # :==> Fill in your project data here
 # The package name is the name on PyPI
 # it is not the python module names.
-package_name = "dt-pondcleaner"
-library_webpage = "http://github.com/duckietown/template-library"
-maintainer = "Mack"
-maintainer_email = "admin@duckietown.org"
-short_description = "A short description"
+package_name = "dt-maps"
+library_webpage = "https://github.com/duckietown/lib-dt-maps"
+maintainer = "Andrea F. Daniele"
+maintainer_email = "afdaniele@ttic.edu"
+short_description = "Duckietown Maps v2 library"
 full_description = """
-A longer description.
+Duckietown Maps v2 library.
 """
 
 # Read version from the __init__ file
@@ -29,7 +29,7 @@ def get_version_from_source(filename):
     return version
 
 
-version = get_version_from_source("src/duckietown_pondcleaner/__init__.py")
+version = get_version_from_source("src/dt_maps/__init__.py")
 
 # read project dependencies
 # NO - dependencies.txt is for testing dependiences - EVERYTHING PINNED
@@ -55,9 +55,6 @@ description = """
     underline=underline,
 )
 
-console_scripts = [
-    "dt-pc-demo = duckietown_pondcleaner:dt_pc_demo",
-]
 # setup package
 setup(
     name=package_name,
@@ -70,5 +67,4 @@ setup(
     packages=find_packages("./src"),
     long_description=description,
     version=version,
-    entry_points={"console_scripts": console_scripts},
 )

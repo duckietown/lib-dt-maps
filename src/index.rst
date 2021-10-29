@@ -1,11 +1,12 @@
-Welcome to the Duckietown Pondcleaner documentation
-===================================================
+Welcome to the Duckietown Maps documentation
+============================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   duckietown_pondcleaner/index
+   docs/index
+   dt_maps/index
 
 
 Indices and tables
