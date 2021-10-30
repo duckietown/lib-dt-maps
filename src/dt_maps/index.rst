@@ -4,6 +4,5 @@ Duckietown Maps package
 API
 ---
 
-..
-   .. automodule:: dt_maps.api
-      :members:
+.. autoclass:: dt_maps.Map
+  :members:
