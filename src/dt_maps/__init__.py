@@ -1,7 +1,9 @@
 __version__ = "0.0.0"
 
-from .Map import Map
+from .Map import Map, MapLayer, MapAsset
 
 __all__ = [
-    Map
+    Map,
+    MapLayer,
+    MapAsset
 ]
