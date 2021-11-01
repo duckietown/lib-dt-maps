@@ -38,7 +38,9 @@ version = get_version_from_source("src/dt_maps/__init__.py")
 # with open(dependencies_file, 'rt') as fin:
 #     dependencies = list(filter(lambda line: not line.startswith('#'), fin.read().splitlines()))
 
-install_requires = []
+install_requires = [
+    "networkx"
+]
 tests_require = []
 
 # compile description
