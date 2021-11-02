@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import Tuple, Union, Iterable, Any, Optional
 
-from dt_maps import Map
 from dt_maps.types.commons import EntityHelper, FieldPath
 from dt_maps.types.frames import Frame
 
@@ -25,11 +24,6 @@ class TileOrientation(Enum):
 
 
 class Tile(EntityHelper):
-
-    def __init__(self, m: Map, tile_key: str):
-        super(Tile, self).__init__(m, tile_key)
-        self._map = m
-        self._key = tile_key
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {

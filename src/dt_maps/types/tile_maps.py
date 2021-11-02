@@ -1,15 +1,9 @@
 from typing import Optional, Iterable, Any, Union
 
-from dt_maps import Map
 from dt_maps.types.commons import EntityHelper
 
 
 class TileSize(EntityHelper):
-
-    def __init__(self, m: Map, key: str):
-        super(TileSize, self).__init__(m, key)
-        self._map = m
-        self._key = key
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
@@ -44,11 +38,6 @@ class TileSize(EntityHelper):
 
 
 class TileMap(EntityHelper):
-
-    def __init__(self, m: Map, tile_key: str):
-        super(TileMap, self).__init__(m, tile_key)
-        self._map = m
-        self._key = tile_key
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
