@@ -1,7 +1,6 @@
-from typing import Union, Iterable
+from typing import Union, Iterable, Optional, Any
 
 from dt_maps import Map
-from dt_maps.exceptions import assert_type
 from dt_maps.types.commons import EntityHelper
 
 
@@ -12,7 +11,7 @@ class Pose3D(EntityHelper):
         self._map = m
         self._key = key
 
-    def _get_property_types(self, name: str):
+    def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
             "x": float,
             "y": float,
@@ -20,6 +19,16 @@ class Pose3D(EntityHelper):
             "roll": float,
             "pitch": float,
             "yaw": float
+        }[name]
+
+    def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
+        return {
+            "x": None,
+            "y": None,
+            "z": None,
+            "roll": None,
+            "pitch": None,
+            "yaw": None
         }[name]
 
     def _get_layer_name(self) -> str:

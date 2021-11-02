@@ -36,7 +36,7 @@ def test_tile_maps_tile_map_set():
     assert m.layers.tile_maps[tile_map].tile_size.y == 0.4
 
 
-def test_tile_maps_tile_map_set_getitem():
+def test_tile_maps_tile_map_set_setitem():
     m = _load_map()
     tile_map = "map_0"
     test_tile_maps_tile_map_map_0()

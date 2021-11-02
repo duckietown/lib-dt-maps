@@ -53,7 +53,7 @@ def test_frames_frame_set():
     assert m.layers.frames[frame].relative_to == "map_99"
 
 
-def test_frames_frame_set_getitem():
+def test_frames_frame_set_setitem():
     m = _load_map()
     frame = "map_0/tile_0_1"
     test_frames_frame_tile_0_1()
