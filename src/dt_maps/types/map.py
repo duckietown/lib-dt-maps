@@ -138,9 +138,9 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         field_parent = self.read(key, field_path[:-1])
         field_parent[field_path[-1]] = value
 
-    def register_entity_helper(self, entity_type: type(ET)):
+    def register_entity_helper(self, helper_type: type(ET)):
         """
-        Instruct the map layer to wrap entities with the given type.
+        Instruct the map layer to wrap entities with the given helper class.
         For example, we use the class :py:class:`dt_maps.types.frames.Frame` to wrap the
         entities in the 'frames' layer. This makes it easier to use frames by allowing us
         to do,
@@ -157,9 +157,9 @@ class MapLayer(Dict[str, ET], Generic[ET]):
             map.layers.frames["frame_0"]["pose"]["x"] = 12.0
 
         Args:
-            entity_type (:obj:`type`):  class to use to wrap entities in this layer
+            helper_type (:obj:`type`):  class to use to wrap entities in this layer
         """
-        self._ET = entity_type
+        self._ET = helper_type
 
     def get(self, key: str) -> Optional[ET]:
         return self.__getitem__(key)
