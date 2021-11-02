@@ -138,7 +138,7 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         field_parent = self.read(key, field_path[:-1])
         field_parent[field_path[-1]] = value
 
-    def register_entity_type(self, entity_type: type(ET)):
+    def register_entity_helper(self, entity_type: type(ET)):
         """
         Instruct the map layer to wrap entities with the given type.
         For example, we use the class :py:class:`dt_maps.types.frames.Frame` to wrap the

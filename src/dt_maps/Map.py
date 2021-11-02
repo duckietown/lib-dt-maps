@@ -133,7 +133,7 @@ class Map:
                 m._layers.__dict__[layer_name] = layer
 
         # register type converters for known layers
-        register = lambda l, t: m.layers.get(l).register_entity_type(t) if m.layers.has(l) else 0
+        register = lambda l, t: m.layers.get(l).register_entity_helper(t) if m.layers.has(l) else 0
         register("frames", Frame)
         register("tile_maps", TileMap)
         register("tiles", Tile)
