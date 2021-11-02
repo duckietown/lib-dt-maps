@@ -1,0 +1,7 @@
+people:
+    person_0:
+        name: John
+        age: 27
+    person_1:
+        name: Marta
+        age: 29
