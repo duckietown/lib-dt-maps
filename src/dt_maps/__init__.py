@@ -4,7 +4,7 @@ from .types import MapLayer, MapAsset
 from .Map import Map
 
 __all__ = [
-    Map,
-    MapLayer,
-    MapAsset
+    "Map",
+    "MapLayer",
+    "MapAsset"
 ]
