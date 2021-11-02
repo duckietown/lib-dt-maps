@@ -5,7 +5,12 @@ import logging
 
 from pathlib import Path
 
-from dt_maps.types import MapLayerNamespace, MapAsset, MapLayer
+from dt_maps.types import MapAsset, MapLayer
+from dt_maps.types.map import MapLayerNamespace
+
+from dt_maps.types.tiles import Tile
+from dt_maps.types.frames import Frame
+from dt_maps.types.tile_maps import TileMap
 
 logging.basicConfig()
 
@@ -104,7 +109,7 @@ class Map:
         if not os.path.isdir(map_dir):
             raise NotADirectoryError(f"The path '{map_dir}' is not a directory.")
         # build empty map
-        _map = Map(name, map_dir)
+        m = Map(name, map_dir)
         # find layers
         layer_pattern = os.path.join(map_dir, "*.yaml")
         layer_fpaths = glob.glob(layer_pattern)
@@ -120,8 +125,14 @@ class Map:
                     raise RuntimeError(f"The layer file '{layer_fpath}' does not have "
                                        f"'{layer_name}' as key to the root object.")
                 # turn raw dict into a MapLayer object
-                layer = MapLayer(layer_name, layer_content)
+                layer = MapLayer(m, layer_name, layer_content)
                 # populate map
-                _map._layers.__dict__[layer_name] = layer
+                m._layers.__dict__[layer_name] = layer
+
+        # register type converters for known layers
+        register = lambda l, t: m.layers.get(l).register_entity_type(t) if m.layers.has(l) else 0
+        register("frames", Frame)
+        register("tile_maps", TileMap)
+        register("tiles", Tile)
         # ---
-        return _map
+        return m

@@ -1,13 +1,23 @@
 from dt_maps import Map
-from dt_maps.types import EntityHelper
+from dt_maps.types.commons import EntityHelper
 
 
 class Pose3D(EntityHelper):
 
     def __init__(self, m: Map, key: str):
-        super(Pose3D, self).__init__()
+        super(Pose3D, self).__init__(m, key)
         self._map = m
         self._key = key
+
+    def __getitem__(self, item: str):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "z": self.z,
+            "roll": self.roll,
+            "pitch": self.pitch,
+            "yaw": self.yaw,
+        }[item]
 
     def _set_property(self, name: str, value: float):
         self._map.layers.frames[self._key]["pose"][name] = value

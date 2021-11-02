@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from typing import TextIO, Iterator, Tuple, Union, Generic, TypeVar, Dict, Optional, Any
 
 from dt_maps.exceptions import EntityNotFound
+from dt_maps.types.commons import EntityHelper
 
 
 class MapAsset:
@@ -73,15 +74,7 @@ class MapAsset:
         os.makedirs(os.path.dirname(self._fpath), exist_ok=True)
 
 
-class MapEntity(dict, ABC):
-
-    @staticmethod
-    @abstractmethod
-    def from_dict(d: dict) -> 'MapEntity':
-        pass
-
-
-ET = TypeVar("ET", bound=MapEntity)
+ET = TypeVar("ET", bound=EntityHelper)
 
 
 class MapLayer(Dict[str, ET], Generic[ET]):
@@ -101,8 +94,10 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         map.layers.frames["frame_0"]
     """
 
-    def __init__(self, name: str, *args, **kwargs):
+    def __init__(self, m, name: str, *args, **kwargs):
+        self._map = m
         self._name: str = name
+        self._ET: Optional[type(ET)] = None
         self._cache: Dict[str, ET] = {}
         super(MapLayer, self).__init__(*args, **kwargs)
 
@@ -116,10 +111,16 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         except KeyError:
             raise EntityNotFound(self._name, key=key)
         # turn 'dict' into 'T'
-        wrapped = ET.from_dict(**item)
+        if self._ET:
+            wrapped = self._ET.create(self._map, key)
+        else:
+            wrapped = item
         # cache and return
         self._cache[key] = wrapped
         return wrapped
+
+    def register_entity_type(self, entity_type: type(ET)):
+        self._ET = entity_type
 
     def get(self, key: str) -> Optional[ET]:
         return self.__getitem__(key)
@@ -142,6 +143,12 @@ class MapLayer(Dict[str, ET], Generic[ET]):
 
 class MapLayerNamespace(SimpleNamespace):
 
+    def __init__(self, *args, **kwargs):
+        super(MapLayerNamespace, self).__init__(*args, **kwargs)
+
+    def get(self, name: str) -> bool:
+        return self.__dict__.get(name)
+
     def has(self, name: str) -> bool:
         return self.__dict__.get(name, None) is not None
 
@@ -153,6 +160,14 @@ class MapLayerNamespace(SimpleNamespace):
     @property
     def frames(self) -> MapLayer[str]:
         return self.__getitem__("frames")
+
+    @property
+    def tile_maps(self) -> MapLayer[str]:
+        return self.__getitem__("tile_maps")
+
+    @property
+    def tiles(self) -> MapLayer[str]:
+        return self.__getitem__("tiles")
 
     # known layers <==
 
