@@ -32,13 +32,16 @@ class Tile(EntityHelper):
         self._map = m
         self._key = tile_key
 
-    def __getitem__(self, item: str):
+    def _get_property_types(self, name: str):
         return {
-            "i": self.i,
-            "j": self.j,
-            "type": self.type,
-            "orientation": self.orientation
-        }[item]
+            "i": int,
+            "j": int,
+            "type": str,
+            "orientation": str,
+        }[name]
+
+    def _get_layer_name(self) -> str:
+        return "tiles"
 
     @property
     def frame(self) -> Frame:
@@ -46,36 +49,34 @@ class Tile(EntityHelper):
 
     @property
     def i(self) -> int:
-        return self._map.layers.tiles[self._key]["i"]
+        return self._get_property("i")
 
     @property
     def j(self) -> int:
-        return self._map.layers.tiles[self._key]["j"]
+        return self._get_property("j")
 
     @property
     def type(self) -> TileType:
-        return TileType(self._map.layers.tiles[self._key]["type"])
+        return TileType(self._get_property("type"))
 
     @property
     def orientation(self) -> TileOrientation:
-        return TileOrientation(self._map.layers.tiles[self._key]["orientation"])
+        return TileOrientation(self._get_property("orientation"))
 
     @i.setter
     def i(self, value: int):
-        assert_type(value, int, "i")
-        self._map.layers.tiles[self._key]["i"] = value
+        self._set_property("i", int, value)
 
     @j.setter
     def j(self, value: int):
-        assert_type(value, int, "j")
-        self._map.layers.tiles[self._key]["j"] = value
+        self._set_property("j", int, value)
 
     @type.setter
     def type(self, value: TileType):
         assert_type(value, TileType, "type")
-        self._map.layers.tiles[self._key]["type"] = value.value
+        self._set_property("type", str, value.value)
 
     @orientation.setter
     def orientation(self, value: TileOrientation):
         assert_type(value, TileOrientation, "orientation")
-        self._map.layers.tiles[self._key]["orientation"] = value.value
+        self._set_property("orientation", str, value.value)

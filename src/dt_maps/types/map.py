@@ -2,9 +2,9 @@ import os
 from abc import abstractmethod, ABC
 
 from types import SimpleNamespace
-from typing import TextIO, Iterator, Tuple, Union, Generic, TypeVar, Dict, Optional, Any
+from typing import TextIO, Iterator, Tuple, Union, Generic, TypeVar, Dict, Optional, Any, Iterable
 
-from dt_maps.exceptions import EntityNotFound
+from dt_maps.exceptions import EntityNotFound, FieldNotFound
 from dt_maps.types.commons import EntityHelper
 
 
@@ -101,15 +101,19 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         self._cache: Dict[str, ET] = {}
         super(MapLayer, self).__init__(*args, **kwargs)
 
+    def _get_raw(self, key: str) -> dict:
+        # get item from underlying dictionary
+        try:
+            return super(MapLayer, self).__getitem__(key)
+        except KeyError:
+            raise EntityNotFound(self._name, key=key)
+
     def __getitem__(self, key: str) -> ET:
         # check cached
         if key in self._cache:
             return self._cache[key]
         # get item from underlying dictionary
-        try:
-            item: dict = super(MapLayer, self).__getitem__(key)
-        except KeyError:
-            raise EntityNotFound(self._name, key=key)
+        item = self._get_raw(key)
         # turn 'dict' into 'T'
         if self._ET:
             wrapped = self._ET.create(self._map, key)
@@ -119,7 +123,42 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         self._cache[key] = wrapped
         return wrapped
 
+    def read(self, key: str, field_path: Union[str, Iterable[str]]):
+        field_path = field_path if isinstance(field_path, (list, tuple)) else [field_path]
+        value = self._get_raw(key)
+        for field in field_path:
+            try:
+                value = value[field]
+            except KeyError:
+                raise FieldNotFound(key, self._name, '.'.join(field_path))
+        return value
+
+    def write(self, key: str, field_path: Union[str, Iterable[str]], value: Any):
+        field_path = field_path if isinstance(field_path, (list, tuple)) else [field_path]
+        field_parent = self.read(key, field_path[:-1])
+        field_parent[field_path[-1]] = value
+
     def register_entity_type(self, entity_type: type(ET)):
+        """
+        Instruct the map layer to wrap entities with the given type.
+        For example, we use the class :py:class:`dt_maps.types.frames.Frame` to wrap the
+        entities in the 'frames' layer. This makes it easier to use frames by allowing us
+        to do,
+
+        .. code-block:: python
+
+            map.layers.frames["frame_0"].pose.x = 12.0
+
+
+        instead of,
+
+        .. code-block:: python
+
+            map.layers.frames["frame_0"]["pose"]["x"] = 12.0
+
+        Args:
+            entity_type (:obj:`type`):  class to use to wrap entities in this layer
+        """
         self._ET = entity_type
 
     def get(self, key: str) -> Optional[ET]:
@@ -146,7 +185,7 @@ class MapLayerNamespace(SimpleNamespace):
     def __init__(self, *args, **kwargs):
         super(MapLayerNamespace, self).__init__(*args, **kwargs)
 
-    def get(self, name: str) -> bool:
+    def get(self, name: str) -> MapLayer:
         return self.__dict__.get(name)
 
     def has(self, name: str) -> bool:

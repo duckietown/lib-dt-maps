@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, Any, Union, Iterable
 
 from dt_maps import Map
+from dt_maps.exceptions import assert_type
 from dt_maps.types.commons import EntityHelper
 from dt_maps.types.geometry import Pose3D
 
@@ -12,11 +13,14 @@ class Frame(EntityHelper):
         self._map = m
         self._key = key
 
-    def __getitem__(self, item: str):
+    def _get_property_types(self, name: str):
         return {
-            "pose": self.pose,
-            "relative_to": self.relative_to,
-        }[item]
+            "pose": dict,
+            "relative_to": str
+        }[name]
+
+    def _get_layer_name(self) -> str:
+        return "frames"
 
     @property
     def pose(self) -> Pose3D:
@@ -24,8 +28,8 @@ class Frame(EntityHelper):
 
     @property
     def relative_to(self) -> Optional[str]:
-        return self._map.layers.frames[self._key]["relative_to"]
+        return self._get_property("relative_to")
 
     @relative_to.setter
     def relative_to(self, value: Optional[str]):
-        self._map.layers.frames[self._key]["relative_to"] = value
+        self._set_property("relative_to", (str, None), value)

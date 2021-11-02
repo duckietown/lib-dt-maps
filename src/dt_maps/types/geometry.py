@@ -1,4 +1,7 @@
+from typing import Union, Iterable
+
 from dt_maps import Map
+from dt_maps.exceptions import assert_type
 from dt_maps.types.commons import EntityHelper
 
 
@@ -9,66 +12,63 @@ class Pose3D(EntityHelper):
         self._map = m
         self._key = key
 
-    def __getitem__(self, item: str):
+    def _get_property_types(self, name: str):
         return {
-            "x": self.x,
-            "y": self.y,
-            "z": self.z,
-            "roll": self.roll,
-            "pitch": self.pitch,
-            "yaw": self.yaw,
-        }[item]
+            "x": float,
+            "y": float,
+            "z": float,
+            "roll": float,
+            "pitch": float,
+            "yaw": float
+        }[name]
 
-    def _set_property(self, name: str, value: float):
-        self._map.layers.frames[self._key]["pose"][name] = value
-
-    def _get_property(self, name: str) -> float:
-        return self._map.layers.frames[self._key]["pose"][name]
+    def _get_layer_name(self) -> str:
+        return "frames"
 
     @property
     def x(self) -> float:
-        return self._get_property("x")
+        return self._get_property(("pose", "x"))
 
     @property
     def y(self) -> float:
-        return self._get_property("y")
+        return self._get_property(("pose", "y"))
 
     @property
     def z(self) -> float:
-        return self._get_property("z")
+        return self._get_property(("pose", "z"))
 
     @property
     def roll(self) -> float:
-        return self._get_property("roll")
+        return self._get_property(("pose", "roll"))
 
     @property
     def pitch(self) -> float:
-        return self._get_property("pitch")
+        return self._get_property(("pose", "pitch"))
 
     @property
     def yaw(self) -> float:
-        return self._get_property("yaw")
+        return self._get_property(("pose", "yaw"))
 
     @x.setter
     def x(self, value: float):
-        self._set_property("x", value)
+        self._set_property(("pose", "x"), float, value)
 
     @y.setter
     def y(self, value: float):
-        self._set_property("y", value)
+        self._set_property(("pose", "y"), float, value)
 
     @z.setter
     def z(self, value: float):
-        self._set_property("z", value)
+        self._set_property(("pose", "z"), float, value)
 
     @roll.setter
     def roll(self, value: float):
-        self._set_property("roll", value)
+        self._set_property(("pose", "roll"), float, value)
 
     @pitch.setter
     def pitch(self, value: float):
-        self._set_property("pitch", value)
+        self._set_property(("pose", "pitch"), float, value)
 
     @yaw.setter
     def yaw(self, value: float):
-        self._set_property("yaw", value)
+        self._set_property(("pose", "yaw"), float, value)

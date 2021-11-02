@@ -70,6 +70,9 @@ class Map:
         """
         return self._assets_dir
 
+    def get_layer(self, name: str) -> MapLayer:
+        return self._layers.get(name)
+
     def asset(self, key: str) -> MapAsset:
         """
         Creates a MapAsset object representing the asset with ``key``.
