@@ -2,13 +2,9 @@ import os
 from abc import abstractmethod, ABC
 
 from types import SimpleNamespace
-from typing import TextIO, Iterator, Tuple, Union, Generic, TypeVar, Dict, _KT, Optional, _VT_co
+from typing import TextIO, Iterator, Tuple, Union, Generic, TypeVar, Dict, Optional, Any
 
 from dt_maps.exceptions import EntityNotFound
-
-Tile = dict
-TileCoordinates = Tuple[int, int]
-TileMap = dict
 
 
 class MapAsset:
@@ -85,10 +81,10 @@ class MapEntity(dict, ABC):
         pass
 
 
-MapEntityType = TypeVar("MapEntityType", bound=MapEntity)
+ET = TypeVar("ET", bound=MapEntity)
 
 
-class MapLayer(dict, Generic[MapEntityType], Dict[str, MapEntityType]):
+class MapLayer(Dict[str, ET], Generic[ET]):
     """
     Class representing a map layer.
     It is a subclass of :py:class:`dict`.
@@ -107,10 +103,10 @@ class MapLayer(dict, Generic[MapEntityType], Dict[str, MapEntityType]):
 
     def __init__(self, name: str, *args, **kwargs):
         self._name: str = name
-        self._cache: Dict[str, MapEntityType] = {}
+        self._cache: Dict[str, ET] = {}
         super(MapLayer, self).__init__(*args, **kwargs)
 
-    def __getitem__(self, key: str) -> MapEntityType:
+    def __getitem__(self, key: str) -> ET:
         # check cached
         if key in self._cache:
             return self._cache[key]
@@ -120,14 +116,19 @@ class MapLayer(dict, Generic[MapEntityType], Dict[str, MapEntityType]):
         except KeyError:
             raise EntityNotFound(self._name, key=key)
         # turn 'dict' into 'T'
-        wrapped = MapEntityType.from_dict(**item)
+        wrapped = ET.from_dict(**item)
         # cache and return
         self._cache[key] = wrapped
         return wrapped
 
-    def get(self, key: str) -> Optional[MapEntityType]:
-        #TODO: this should do something similar to above
-        return self.__getitem__(key, *args, **kwargs)
+    def get(self, key: str) -> Optional[ET]:
+        return self.__getitem__(key)
+
+    def get(self, key: str, default: Any) -> Optional[ET]:
+        try:
+            return self.__getitem__(key)
+        except (KeyError, EntityNotFound):
+            return default
 
     def as_raw_dict(self):
         """

@@ -23,6 +23,7 @@ def get_tile_map_graph(m: Map, tile_map_key: str) -> nx.DiGraph:
         if tile is None:
             raise EntityNotFound("tiles", i=i, j=j)
         # get tile graph
+        get_tile_graph()
 
 
         # g = get_tile_graph(tile, )
