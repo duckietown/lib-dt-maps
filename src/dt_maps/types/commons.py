@@ -15,6 +15,10 @@ class EntityHelper:
         self._map = m
         self._key = key
 
+    @property
+    def key(self) -> str:
+        return self._key
+
     def __getitem__(self, key: str):
         return self._get_property(key)
 

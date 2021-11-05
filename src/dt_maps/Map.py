@@ -3,8 +3,11 @@ import yaml
 import glob
 import logging
 
+import networkx as nx
+
 from pathlib import Path
 
+from dt_maps.graph.tile_maps import get_tile_map_graph
 from dt_maps.types import MapAsset, MapLayer
 from dt_maps.types.map import MapLayerNamespace
 
@@ -69,6 +72,13 @@ class Map:
         Path to the map's assets directory.
         """
         return self._assets_dir
+
+    def graph(self, subdivision_steps: int = 0) -> nx.DiGraph:
+        G = nx.DiGraph()
+        for tile_map in self.layers.tile_maps.values():
+            tile_map_G = get_tile_map_graph(self, tile_map, subdivision_steps=subdivision_steps)
+            G = nx.compose(G, tile_map_G)
+        return G
 
     def get_layer(self, name: str) -> MapLayer:
         return self._layers.get(name)
