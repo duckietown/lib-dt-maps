@@ -208,6 +208,10 @@ class MapLayerNamespace(SimpleNamespace):
     def tiles(self) -> MapLayer[str]:
         return self.__getitem__("tiles")
 
+    @property
+    def watchtowers(self) -> MapLayer[str]:
+        return self.__getitem__("watchtowers")
+
     # known layers <==
 
     def __getitem__(self, layer: str) -> MapLayer:

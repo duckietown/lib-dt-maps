@@ -7,7 +7,6 @@ FieldPath = Union[str, Iterable[str]]
 
 
 class EntityHelper:
-
     # NOTE: lazy instantiation is needed
     _cache = None
 
@@ -46,11 +45,11 @@ class EntityHelper:
         layer_name: str = self._get_layer_name()
         layer = self._map.get_layer(layer_name)
         # value check
-        # TODO: this should be done on a FiledPath
+        # TODO: this should be done on a FieldPath
         values = self._get_property_values(name[-1])
         if values is not None and value not in values:
             raise ValueError(f"Invalid value '{value}' for field {name}, entity {self._key}, "
-                                 f"layer '{layer_name}'. Allowed values are {str(values)}.")
+                             f"layer '{layer_name}'. Allowed values are {str(values)}.")
         # write
         layer.write(self._key, name, value)
 
