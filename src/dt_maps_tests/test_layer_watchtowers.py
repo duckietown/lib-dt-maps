@@ -16,7 +16,7 @@ def test_watchtowers_num_watchtowers():
 
 def test_watchtowers_watchtower1():
     m = _load_map()
-    watchtower = "map_1/watchtower1"
+    watchtower = "map_0/watchtower1"
     assert m.layers.watchtowers[watchtower].configuration == WatchtowerType.WT18
     # TODO: id is optional, but we catch exception: `layer 'watchtowers' does not have field 'id'`...
     # assert m.layers.watchtowers[watchtower].id is None
@@ -24,7 +24,7 @@ def test_watchtowers_watchtower1():
 
 def test_watchtowers_set_raw():
     m = _load_map()
-    watchtower = "map_1/watchtower1"
+    watchtower = "map_0/watchtower1"
     m.layers.watchtowers[watchtower].configuration = "WT19"
     try:
         test_watchtowers_watchtower1()
@@ -32,3 +32,43 @@ def test_watchtowers_set_raw():
     except AssertionError:
         pass
     assert m.layers.watchtowers[watchtower].configuration == WatchtowerType.WT19
+
+
+def test_watchtowers_set_wrong_raw():
+    m = _load_map()
+    watchtower = "map_0/watchtower1"
+    try:
+        m.layers.watchtowers[watchtower].configuration = "wrong"
+        assert False
+    except ValueError:
+        pass
+
+
+def test_watchtowers_set_setitem_raw():
+    m = _load_map()
+    watchtower = "map_0/watchtower1"
+    m.layers.watchtowers[watchtower]["configuration"] = "WT19"
+    try:
+        test_watchtowers_watchtower1()
+        assert False
+    except AssertionError:
+        pass
+    assert m.layers.watchtowers[watchtower]["configuration"] == WatchtowerType.WT19
+
+
+def test_watchtowers_set_wrong_setitem_raw():
+    m = _load_map()
+    watchtower = "map_0/watchtower1"
+    try:
+        m.layers.watchtowers[watchtower]["configuration"] = "wrong"
+        assert False
+    except ValueError:
+        pass
+
+
+def test_watchtowers_frames():
+    m = _load_map()
+    watchtower1 = "map_0/watchtower1"
+    watchtower2 = watchtower1 + "/watchtower2"
+    assert m.layers.watchtowers[watchtower1].frame.relative_to == "map_0"
+    assert m.layers.watchtowers[watchtower2].frame.relative_to == watchtower1
