@@ -1,11 +1,25 @@
 import os
-from abc import abstractmethod, ABC
 
 from types import SimpleNamespace
-from typing import TextIO, Iterator, Tuple, Union, Generic, TypeVar, Dict, Optional, Any, Iterable
+from typing import \
+    TextIO,\
+    Iterator,\
+    Tuple,\
+    Union,\
+    Generic,\
+    TypeVar,\
+    Dict,\
+    Optional,\
+    Any,\
+    Iterable,\
+    ItemsView,\
+    ValuesView
 
 from dt_maps.exceptions import EntityNotFound, FieldNotFound
 from dt_maps.types.commons import EntityHelper
+from dt_maps.types.frames import Frame
+from dt_maps.types.tile_maps import TileMap
+from dt_maps.types.tiles import Tile
 
 
 class MapAsset:
@@ -170,6 +184,14 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         except (KeyError, EntityNotFound):
             return default
 
+    def items(self) -> ItemsView[str, ET]:
+        for key in self.keys():
+            yield key, self.__getitem__(key)
+
+    def values(self) -> ValuesView[ET]:
+        for key in self.keys():
+            yield self.__getitem__(key)
+
     def as_raw_dict(self):
         """
         Raw representation of the map layer as a Python dictionary.
@@ -182,8 +204,8 @@ class MapLayer(Dict[str, ET], Generic[ET]):
 
 class MapLayerNamespace(SimpleNamespace):
 
-    def __init__(self, *args, **kwargs):
-        super(MapLayerNamespace, self).__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super(MapLayerNamespace, self).__init__(**kwargs)
 
     def get(self, name: str) -> MapLayer:
         return self.__dict__.get(name)
@@ -197,15 +219,15 @@ class MapLayerNamespace(SimpleNamespace):
     # known layers ==>
 
     @property
-    def frames(self) -> MapLayer[str]:
+    def frames(self) -> MapLayer[Frame]:
         return self.__getitem__("frames")
 
     @property
-    def tile_maps(self) -> MapLayer[str]:
+    def tile_maps(self) -> MapLayer[TileMap]:
         return self.__getitem__("tile_maps")
 
     @property
-    def tiles(self) -> MapLayer[str]:
+    def tiles(self) -> MapLayer[Tile]:
         return self.__getitem__("tiles")
 
     @property

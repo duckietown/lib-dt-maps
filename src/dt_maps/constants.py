@@ -11,6 +11,6 @@ TILE_SIZE = 0.585
 LANE_WIDTH = 0.21
 LANE_WIDTH_NORMALIZED = LANE_WIDTH / TILE_SIZE
 
-# this is the distance between the edge of yellow tape and the center of the lane
+# This is the distance between the edge of yellow tape and the center of the lane
 # normalized with respect to the tile size,
 CENTER_OF_LANE_NORMALIZED = (LANE_WIDTH / 2.0) / TILE_SIZE

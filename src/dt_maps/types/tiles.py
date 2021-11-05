@@ -9,8 +9,10 @@ TileCoordinates = Tuple[int, int]
 
 class TileType(Enum):
     STRAIGHT = "straight"
-    CURVE = "curve"
+    CURVE_LEFT = "curve_left"
+    CURVE_RIGHT = "curve_right"
     ASPHALT = "asphalt"
+    FLOOR = "floor"
     GRASS = "grass"
     THREE_WAY = "3way"
     FOUR_WAY = "4way"
