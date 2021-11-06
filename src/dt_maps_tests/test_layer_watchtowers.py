@@ -47,7 +47,7 @@ def test_watchtowers_set_wrong_raw():
 def test_watchtowers_set_setitem_raw():
     m = _load_map()
     watchtower = "map_0/watchtower1"
-    m.layers.watchtowers[watchtower]["configuration"] = "WT19"
+    m.layers.watchtowers[watchtower]["configuration"] = WatchtowerType.WT19
     try:
         test_watchtowers_watchtower1()
         assert False

@@ -51,7 +51,7 @@ class Watchtower(EntityHelper):
 
     @property
     def configuration(self) -> WatchtowerType:
-        return self._get_property(CONFIGURATION)
+        return WatchtowerType(self._get_property(CONFIGURATION))
 
     @property
     def id(self) -> Optional[str]:
