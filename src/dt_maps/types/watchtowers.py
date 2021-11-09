@@ -24,7 +24,7 @@ class Watchtower(EntityHelper):
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
             CONFIGURATION: str,
-            ID: Optional[str]
+            ID: (type(None), str)
         }[name]
 
     def _get_layer_name(self) -> str:
