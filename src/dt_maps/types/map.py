@@ -20,6 +20,7 @@ from dt_maps.types.commons import EntityHelper
 from dt_maps.types.frames import Frame
 from dt_maps.types.tile_maps import TileMap
 from dt_maps.types.tiles import Tile
+from dt_maps.types.watchtowers import Watchtower
 
 
 class MapAsset:
@@ -229,6 +230,10 @@ class MapLayerNamespace(SimpleNamespace):
     @property
     def tiles(self) -> MapLayer[Tile]:
         return self.__getitem__("tiles")
+
+    @property
+    def watchtowers(self) -> MapLayer[Watchtower]:
+        return self.__getitem__("watchtowers")
 
     # known layers <==
 

@@ -14,6 +14,7 @@ from dt_maps.types.map import MapLayerNamespace
 from dt_maps.types.tiles import Tile
 from dt_maps.types.frames import Frame
 from dt_maps.types.tile_maps import TileMap
+from dt_maps.types.watchtowers import Watchtower
 
 logging.basicConfig()
 
@@ -147,5 +148,6 @@ class Map:
         register("frames", Frame)
         register("tile_maps", TileMap)
         register("tiles", Tile)
+        register("watchtowers", Watchtower)
         # ---
         return m
