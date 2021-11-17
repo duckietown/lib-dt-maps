@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, Any, Union
+from typing import Optional, Iterable, Any, Union, List
 
 from dt_maps.types.commons import EntityHelper
 
@@ -19,6 +19,9 @@ class TileSize(EntityHelper):
             "x": None,
             "y": None
         }[name]
+
+    def _get_property_names(self) -> List[str]:
+        return ["x", "y"]
 
     @property
     def x(self) -> float:
@@ -43,6 +46,9 @@ class TileMap(EntityHelper):
         return {
             "tile_size": dict,
         }[name]
+
+    def _get_property_names(self) -> List[str]:
+        return ["tile_size"]
 
     def _get_layer_name(self) -> str:
         return "tile_maps"

@@ -3,3 +3,4 @@ watchtowers:
     configuration: WT18
   map_0/watchtower1/watchtower2:
     configuration: WT19
+    id: test_id

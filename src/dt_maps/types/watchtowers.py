@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Union, Iterable, Optional, Any
+from typing import Union, Iterable, Optional, Any, List
 
 from dt_maps.types.commons import EntityHelper, FieldPath
 from dt_maps.types.frames import Frame
@@ -26,6 +26,9 @@ class Watchtower(EntityHelper):
             CONFIGURATION: str,
             ID: (type(None), str)
         }[name]
+
+    def _get_property_names(self) -> List[str]:
+        return [CONFIGURATION, ID]
 
     def _get_layer_name(self) -> str:
         return "watchtowers"

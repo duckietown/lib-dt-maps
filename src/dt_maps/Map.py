@@ -142,7 +142,6 @@ class Map:
                 layer = MapLayer(m, layer_name, layer_content)
                 # populate map
                 m._layers.__dict__[layer_name] = layer
-
         # register type converters for known layers
         register = lambda l, t: m.layers.get(l).register_entity_helper(t) if m.layers.has(l) else 0
         register("frames", Frame)

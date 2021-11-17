@@ -1,4 +1,4 @@
-from typing import Optional, Any, Union, Iterable
+from typing import Optional, Any, Union, Iterable, List
 
 from dt_maps.types.commons import EntityHelper
 from dt_maps.types.geometry import Pose3D
@@ -14,6 +14,9 @@ class Frame(EntityHelper):
 
     def _get_layer_name(self) -> str:
         return "frames"
+
+    def _get_property_names(self) -> List[str]:
+        return ["pose", "relative_to"]
 
     def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
         return {

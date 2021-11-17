@@ -141,6 +141,7 @@ class MapLayer(Dict[str, ET], Generic[ET]):
     def read(self, key: str, field_path: Union[str, Iterable[str]]):
         field_path = field_path if isinstance(field_path, (list, tuple)) else [field_path]
         value = self._get_raw(key)
+        ####
         for field in field_path:
             try:
                 value = value[field]

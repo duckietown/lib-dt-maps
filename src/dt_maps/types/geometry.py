@@ -1,4 +1,4 @@
-from typing import Union, Iterable, Optional, Any
+from typing import Union, Iterable, Optional, Any, List
 
 from dt_maps.types.commons import EntityHelper
 
@@ -24,6 +24,9 @@ class Pose3D(EntityHelper):
             "pitch": None,
             "yaw": None
         }[name]
+
+    def _get_property_names(self) -> List[str]:
+        return ["x", "y", "z", "roll", "pitch", "yaw"]
 
     def _get_layer_name(self) -> str:
         return "frames"

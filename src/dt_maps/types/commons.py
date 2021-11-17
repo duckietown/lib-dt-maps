@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, Iterable, Union, Optional
+from typing import Any, Iterable, Union, Optional, List
 
 from dt_maps.exceptions import FieldNotFound, assert_type
 
@@ -19,7 +19,15 @@ class EntityHelper:
         return self._key
 
     def __getitem__(self, key: str):
-        return self._get_property(key)
+        try:
+            return self._get_property(key)
+        except FieldNotFound as e:
+            if key not in self._get_property_names():
+                raise e
+            default_type = self._get_property_types(key)
+            if isinstance(default_type, tuple):
+                default_type = default_type[0]
+            return default_type()
 
     def __setitem__(self, key: str, value: Any):
         try:
@@ -35,6 +43,10 @@ class EntityHelper:
 
     @abstractmethod
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
+        pass
+
+    @abstractmethod
+    def _get_property_names(self) -> List[str]:
         pass
 
     @abstractmethod
@@ -64,7 +76,15 @@ class EntityHelper:
         layer_name: str = self._get_layer_name()
         layer = self._map.get_layer(layer_name)
         # read
-        return layer.read(self._key, name)
+        try:
+            return layer.read(self._key, name)
+        except FieldNotFound as e:
+            if name[0] in self._get_property_names():
+                types = self._get_property_types(name[0])
+                if isinstance(types, tuple):
+                    types = types[0]
+                return types()
+            raise e
 
     @classmethod
     def create(cls, m, key: str, *args, **kwargs):

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Tuple, Union, Iterable, Any, Optional
+from typing import Tuple, Union, Iterable, Any, Optional, List
 
 from dt_maps.types.commons import EntityHelper, FieldPath
 from dt_maps.types.frames import Frame
@@ -37,6 +37,9 @@ class Tile(EntityHelper):
 
     def _get_layer_name(self) -> str:
         return "tiles"
+
+    def _get_property_names(self) -> List[str]:
+        return ["i", "j", "type", "orientation"]
 
     def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
         return {
