@@ -193,6 +193,26 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         for key in self.keys():
             yield self.__getitem__(key)
 
+    def filter(self, parent: Optional[str] = None, **kwargs):
+        matches = {}
+        filtered = False
+        # filter by parent
+        if parent is not None:
+            filtered = True
+            for key, item in self.items():
+                if key.startswith(f"{parent.rstrip('/')}/"):
+                    matches[key] = item
+        # filter by prop=value pairs
+        kmatches = {}
+        for prop, value in kwargs.items():
+            pool = matches if filtered else self
+            filtered = True
+            for key, item in pool.items():
+                if prop in item and item[prop] == value:
+                    kmatches[key] = item
+        # ---
+        return kmatches
+
     def as_raw_dict(self):
         """
         Raw representation of the map layer as a Python dictionary.
