@@ -64,8 +64,8 @@ def densify_graph(g: nx.DiGraph, steps: int):
             dr = np.array([-np.sin(yaw), np.cos(yaw), 0])
             # distance between nodes
             d = np.linalg.norm([ux - vx, uy - vy, uz - vz]) / 2.0
-            # apply a bump only to tiles that are not straight
-            bump_enabler = 0.0 if tile.type == TileType.STRAIGHT else 1.0
+            # apply a bump only to segments that are not straight
+            bump_enabler = 0.0 if np.allclose([ux], [vx]) or np.allclose([uy], [vy]) else 1.0
             # smooth the bump as we keep subdividing
             bump_smooth = 1.0 / float(step + 1)
             # compute by how much we have to move orthogonally to the line (u, v)

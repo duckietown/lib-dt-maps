@@ -14,7 +14,8 @@ class TileType(Enum):
     ASPHALT = "asphalt"
     FLOOR = "floor"
     GRASS = "grass"
-    THREE_WAY = "3way"
+    THREE_WAY_LEFT = "3way_left"
+    THREE_WAY_RIGHT = "3way_right"
     FOUR_WAY = "4way"
 
 
