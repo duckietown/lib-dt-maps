@@ -11,7 +11,7 @@ def _load_map() -> Map:
 
 def test_watchtowers_num_watchtowers():
     m = _load_map()
-    assert len(m.layers.watchtowers) == 2
+    assert len(m.layers.watchtowers) == 3
 
 
 def test_watchtowers_watchtower1():

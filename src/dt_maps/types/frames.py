@@ -1,5 +1,6 @@
 from typing import Optional, Any, Union, Iterable
 
+from dt_maps.exceptions import EntityNotFound
 from dt_maps.types.commons import EntityHelper
 from dt_maps.types.geometry import Pose3D
 
@@ -20,6 +21,21 @@ class Frame(EntityHelper):
             "pose": None,
             "relative_to": None
         }[name]
+
+    @property
+    def parent(self) -> 'Optional[Frame]':
+        parts = self.key.split('/')[:-1]
+        current = []
+        parent = None
+        for part in parts:
+            current += [part]
+            parent_key = '/'.join(current)
+            try:
+                parent = self._map.layers.frames[parent_key]
+            except EntityNotFound:
+                pass
+        # ---
+        return parent
 
     @property
     def pose(self) -> Pose3D:

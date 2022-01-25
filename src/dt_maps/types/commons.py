@@ -18,6 +18,13 @@ class EntityHelper:
     def key(self) -> str:
         return self._key
 
+    def __contains__(self, key):
+        try:
+            self._get_property_types(key)
+        except KeyError:
+            return False
+        return True
+
     def __getitem__(self, key: str):
         return self._get_property(key)
 
