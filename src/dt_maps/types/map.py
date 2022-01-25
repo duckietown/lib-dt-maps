@@ -203,13 +203,15 @@ class MapLayer(Dict[str, ET], Generic[ET]):
                 if key.startswith(f"{parent.rstrip('/')}/"):
                     matches[key] = item
         # filter by prop=value pairs
-        kmatches = {}
+        kmatches = matches
         for prop, value in kwargs.items():
-            pool = matches if filtered else self
+            matches = {}
+            pool = kmatches if filtered else self
             filtered = True
             for key, item in pool.items():
                 if prop in item and item[prop] == value:
-                    kmatches[key] = item
+                    matches[key] = item
+            kmatches = matches
         # ---
         return kmatches
 
