@@ -29,7 +29,7 @@ def test_tiles_set():
     test_tiles_map_0_tile_0_1()
     m.layers.tiles[tile].i = 2
     m.layers.tiles[tile].j = 3
-    m.layers.tiles[tile].type = TileType.CURVE_LEFT
+    m.layers.tiles[tile].type = TileType.CURVE
     m.layers.tiles[tile].orientation = TileOrientation.S
     try:
         test_tiles_map_0_tile_0_1()
@@ -38,7 +38,7 @@ def test_tiles_set():
         pass
     assert m.layers.tiles[tile].i == 2
     assert m.layers.tiles[tile].j == 3
-    assert m.layers.tiles[tile].type == TileType.CURVE_LEFT
+    assert m.layers.tiles[tile].type == TileType.CURVE
     assert m.layers.tiles[tile].orientation == TileOrientation.S
 
 
@@ -48,7 +48,7 @@ def test_tiles_set_setitem():
     test_tiles_map_0_tile_0_1()
     m.layers.tiles[tile]["i"] = 2
     m.layers.tiles[tile]["j"] = 3
-    m.layers.tiles[tile]["type"] = TileType.CURVE_RIGHT
+    m.layers.tiles[tile]["type"] = TileType.CURVE
     m.layers.tiles[tile]["orientation"] = TileOrientation.S
     try:
         test_tiles_map_0_tile_0_1()
@@ -57,7 +57,7 @@ def test_tiles_set_setitem():
         pass
     assert m.layers.tiles[tile]["i"] == 2
     assert m.layers.tiles[tile]["j"] == 3
-    assert m.layers.tiles[tile]["type"] == TileType.CURVE_RIGHT
+    assert m.layers.tiles[tile]["type"] == TileType.CURVE
     assert m.layers.tiles[tile]["orientation"] == TileOrientation.S
 
 
@@ -65,14 +65,14 @@ def test_tiles_set_raw():
     m = _load_map()
     tile = "map_0/tile_0_1"
     test_tiles_map_0_tile_0_1()
-    m.layers.tiles[tile].type = "curve_left"
+    m.layers.tiles[tile].type = "curve"
     m.layers.tiles[tile].orientation = "S"
     try:
         test_tiles_map_0_tile_0_1()
         assert False
     except AssertionError:
         pass
-    assert m.layers.tiles[tile].type == TileType.CURVE_LEFT
+    assert m.layers.tiles[tile].type == TileType.CURVE
     assert m.layers.tiles[tile].orientation == TileOrientation.S
 
 
