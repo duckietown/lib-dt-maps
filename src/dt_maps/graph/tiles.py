@@ -77,6 +77,7 @@ def _populate_tile_curve_right(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
             tz
         ]
 
+
 # TODO: need to remove it
 def _populate_tile_curve_left(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
     _populate_tile_curve_right(g, tile, tile_map)
@@ -89,6 +90,7 @@ def _populate_tile_curve_left(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
             (tx * np.sin(np.deg2rad(alpha)) + ty * np.cos(np.deg2rad(alpha))),
             tz
         ]
+
 
 def _populate_tile_3way(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
     graphs = [
@@ -113,8 +115,23 @@ def _populate_tile_3way(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
         g.add_nodes_from(g1.nodes(data=True))
 
 
+# It's the copy of fun "_populate_tile_curve_right"
 def _populate_tile_curve(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
-    raise NotImplemented
+    _populate_tile_straight(g, tile, tile_map)
+    # get 'left in' node, aka top-left node
+    left_in_id = find_nodes(g, direction="in", lane="left")[0]
+    left_in = g.nodes[left_in_id]
+    # get 'right out' node, aka bottom-right node
+    right_out_id = find_nodes(g, direction="out", lane="right")[0]
+    right_out = g.nodes[right_out_id]
+    # rotate nodes
+    for node in [left_in, right_out]:
+        tx, ty, tz = node["position"]
+        node["position"] = [
+            (tx * np.cos(np.deg2rad(-90)) - ty * np.sin(np.deg2rad(-90))),
+            (tx * np.sin(np.deg2rad(-90)) + ty * np.cos(np.deg2rad(-90))),
+            tz
+        ]
 
 
 def _populate_tile_no_graph(_: nx.DiGraph, __: Tile, ___: TileMap):
