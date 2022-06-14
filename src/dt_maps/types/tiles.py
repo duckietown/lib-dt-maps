@@ -17,21 +17,13 @@ class TileType(Enum):
     FOUR_WAY = "4way"
 
 
-class TileOrientation(Enum):
-    N = "N"
-    S = "S"
-    E = "E"
-    W = "W"
-
-
 class Tile(EntityHelper):
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
             "i": int,
             "j": int,
-            "type": str,
-            "orientation": str,
+            "type": str
         }[name]
 
     def _get_layer_name(self) -> str:
@@ -41,8 +33,7 @@ class Tile(EntityHelper):
         return {
             "i": None,
             "j": None,
-            "type": [t.value for t in TileType],
-            "orientation": [o.value for o in TileOrientation],
+            "type": [t.value for t in TileType]
         }[name]
 
     def _set_property(self, name: FieldPath, types: Union[type, Iterable[type]], value: Any):
@@ -50,9 +41,6 @@ class Tile(EntityHelper):
         if name == "type" and isinstance(value, TileType):
             value = value.value
         # TileOrientation -> str
-        if name == "orientation" and isinstance(value, TileOrientation):
-            value = value.value
-        # ---
         super(Tile, self)._set_property(name, types, value)
 
     def _get_property(self, name: FieldPath) -> Any:
@@ -60,10 +48,6 @@ class Tile(EntityHelper):
         # str -> TileType
         if name == "type":
             value = TileType(value)
-        # str -> TileOrientation
-        if name == "orientation":
-            value = TileOrientation(value)
-        # ---
         return value
 
     @property
@@ -82,10 +66,6 @@ class Tile(EntityHelper):
     def type(self) -> TileType:
         return TileType(self._get_property("type"))
 
-    @property
-    def orientation(self) -> TileOrientation:
-        return TileOrientation(self._get_property("orientation"))
-
     @i.setter
     def i(self, value: int):
         self._set_property("i", int, value)
@@ -97,7 +77,3 @@ class Tile(EntityHelper):
     @type.setter
     def type(self, value: Union[str, TileType]):
         self._set_property("type", str, value)
-
-    @orientation.setter
-    def orientation(self, value: Union[str, TileOrientation]):
-        self._set_property("orientation", str, value)

@@ -1,5 +1,5 @@
 from dt_maps import Map
-from dt_maps.types.tiles import TileType, TileOrientation
+from dt_maps.types.tiles import TileType
 
 from . import get_asset_path
 
@@ -20,7 +20,6 @@ def test_tiles_map_0_tile_0_1():
     assert m.layers.tiles[tile].i == 0
     assert m.layers.tiles[tile].j == 1
     assert m.layers.tiles[tile].type == TileType.STRAIGHT
-    assert m.layers.tiles[tile].orientation == TileOrientation.N
 
 
 def test_tiles_set():
@@ -30,7 +29,6 @@ def test_tiles_set():
     m.layers.tiles[tile].i = 2
     m.layers.tiles[tile].j = 3
     m.layers.tiles[tile].type = TileType.CURVE
-    m.layers.tiles[tile].orientation = TileOrientation.S
     try:
         test_tiles_map_0_tile_0_1()
         assert False
@@ -39,7 +37,6 @@ def test_tiles_set():
     assert m.layers.tiles[tile].i == 2
     assert m.layers.tiles[tile].j == 3
     assert m.layers.tiles[tile].type == TileType.CURVE
-    assert m.layers.tiles[tile].orientation == TileOrientation.S
 
 
 def test_tiles_set_setitem():
@@ -49,7 +46,6 @@ def test_tiles_set_setitem():
     m.layers.tiles[tile]["i"] = 2
     m.layers.tiles[tile]["j"] = 3
     m.layers.tiles[tile]["type"] = TileType.CURVE
-    m.layers.tiles[tile]["orientation"] = TileOrientation.S
     try:
         test_tiles_map_0_tile_0_1()
         assert False
@@ -58,7 +54,6 @@ def test_tiles_set_setitem():
     assert m.layers.tiles[tile]["i"] == 2
     assert m.layers.tiles[tile]["j"] == 3
     assert m.layers.tiles[tile]["type"] == TileType.CURVE
-    assert m.layers.tiles[tile]["orientation"] == TileOrientation.S
 
 
 def test_tiles_set_raw():
@@ -66,14 +61,12 @@ def test_tiles_set_raw():
     tile = "map_0/tile_0_1"
     test_tiles_map_0_tile_0_1()
     m.layers.tiles[tile].type = "curve"
-    m.layers.tiles[tile].orientation = "S"
     try:
         test_tiles_map_0_tile_0_1()
         assert False
     except AssertionError:
         pass
     assert m.layers.tiles[tile].type == TileType.CURVE
-    assert m.layers.tiles[tile].orientation == TileOrientation.S
 
 
 def test_tiles_set_setitem_raw():
@@ -81,14 +74,12 @@ def test_tiles_set_setitem_raw():
     tile = "map_0/tile_0_1"
     test_tiles_map_0_tile_0_1()
     m.layers.tiles[tile]["type"] = "floor"
-    m.layers.tiles[tile]["orientation"] = "S"
     try:
         test_tiles_map_0_tile_0_1()
         assert False
     except AssertionError:
         pass
     assert m.layers.tiles[tile]["type"] == TileType.FLOOR
-    assert m.layers.tiles[tile]["orientation"] == TileOrientation.S
 
 
 def test_tiles_set_wrong_raw():
@@ -99,13 +90,7 @@ def test_tiles_set_wrong_raw():
         assert False
     except ValueError:
         pass
-    try:
-        m.layers.tiles[tile].orientation = "SE"
-        assert False
-    except ValueError:
-        pass
     assert m.layers.tiles[tile].type == TileType.STRAIGHT
-    assert m.layers.tiles[tile].orientation == TileOrientation.N
 
 
 def test_tiles_set_wrong_setitem_raw():
@@ -116,10 +101,4 @@ def test_tiles_set_wrong_setitem_raw():
         assert False
     except ValueError:
         pass
-    try:
-        m.layers.tiles[tile]["orientation"] = "SE"
-        assert False
-    except ValueError:
-        pass
     assert m.layers.tiles[tile]["type"] == TileType.STRAIGHT
-    assert m.layers.tiles[tile]["orientation"] == TileOrientation.N
