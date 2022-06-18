@@ -59,6 +59,7 @@ def _populate_tile_straight(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
     g.add_edge(right_bottom_id, right_top_id)
 
 
+# TODO: need to remove it
 def _populate_tile_curve_right(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
     _populate_tile_straight(g, tile, tile_map)
     # get 'left in' node, aka top-left node
@@ -77,6 +78,7 @@ def _populate_tile_curve_right(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
         ]
 
 
+# TODO: need to remove it
 def _populate_tile_curve_left(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
     _populate_tile_curve_right(g, tile, tile_map)
     # rotate nodes
@@ -90,7 +92,7 @@ def _populate_tile_curve_left(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
         ]
 
 
-def _populate_tile_3way_right(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
+def _populate_tile_3way(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
     graphs = [
         (_populate_tile_straight, 0),
         (_populate_tile_curve_right, 0),
@@ -113,20 +115,36 @@ def _populate_tile_3way_right(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
         g.add_nodes_from(g1.nodes(data=True))
 
 
+# It's the copy of fun "_populate_tile_curve_right"
+def _populate_tile_curve(g: nx.DiGraph, tile: Tile, tile_map: TileMap):
+    _populate_tile_straight(g, tile, tile_map)
+    # get 'left in' node, aka top-left node
+    left_in_id = find_nodes(g, direction="in", lane="left")[0]
+    left_in = g.nodes[left_in_id]
+    # get 'right out' node, aka bottom-right node
+    right_out_id = find_nodes(g, direction="out", lane="right")[0]
+    right_out = g.nodes[right_out_id]
+    # rotate nodes
+    for node in [left_in, right_out]:
+        tx, ty, tz = node["position"]
+        node["position"] = [
+            (tx * np.cos(np.deg2rad(-90)) - ty * np.sin(np.deg2rad(-90))),
+            (tx * np.sin(np.deg2rad(-90)) + ty * np.cos(np.deg2rad(-90))),
+            tz
+        ]
+
+
 def _populate_tile_no_graph(_: nx.DiGraph, __: Tile, ___: TileMap):
     pass
 
 
 tile_type_to_populate_fcn: Dict[TileType, Callable[[nx.DiGraph, Tile, TileMap], None]] = {
     TileType.STRAIGHT: _populate_tile_straight,
-    TileType.CURVE_RIGHT: _populate_tile_curve_right,
-    TileType.CURVE_LEFT: _populate_tile_curve_left,
+    TileType.CURVE: _populate_tile_curve,
     TileType.FLOOR: _populate_tile_no_graph,
     TileType.GRASS: _populate_tile_no_graph,
     TileType.ASPHALT: _populate_tile_no_graph,
-    # TODO: not sure why this works, it must be that the two assets are identical in Unity
-    TileType.THREE_WAY_LEFT: _populate_tile_3way_right,
-    TileType.THREE_WAY_RIGHT: _populate_tile_3way_right,
+    TileType.THREE_WAY: _populate_tile_3way
 }
 
 
