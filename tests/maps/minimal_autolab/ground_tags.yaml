@@ -1,0 +1,13 @@
+ground_tags:
+  map_0/tag1:
+    size: 0.1
+    id: 1
+    family: 36h11
+  map_0/tag3:
+    size: 0.15
+    id: 2
+    family: 36h11
+  map_0/tag1/tag2:
+    size: 0.15
+    id: 3
+    family: 36h11
