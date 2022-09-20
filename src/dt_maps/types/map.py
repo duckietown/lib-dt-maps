@@ -21,6 +21,10 @@ from dt_maps.types.frames import Frame
 from dt_maps.types.tile_maps import TileMap
 from dt_maps.types.tiles import Tile
 from dt_maps.types.watchtowers import Watchtower
+from dt_maps.types.traffic_signs import TrafficSign
+from dt_maps.types.vehicles import Vehicle
+from dt_maps.types.citizens import Citizen
+from dt_maps.types.ground_tags import GroundTag
 
 
 class MapAsset:
@@ -256,6 +260,22 @@ class MapLayerNamespace(SimpleNamespace):
     @property
     def watchtowers(self) -> MapLayer[Watchtower]:
         return self.__getitem__("watchtowers")
+
+    @property
+    def traffic_signs(self) -> MapLayer[TrafficSign]:
+        return self.__getitem__("traffic_signs")
+
+    @property
+    def ground_tags(self) -> MapLayer[GroundTag]:
+        return self.__getitem__("ground_tags")
+
+    @property
+    def vehicles(self) -> MapLayer[Vehicle]:
+        return self.__getitem__("vehicles")
+
+    @property
+    def citizens(self) -> MapLayer[Citizen]:
+        return self.__getitem__("citizens")
 
     # known layers <==
 

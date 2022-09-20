@@ -1,0 +1,13 @@
+traffic_signs:
+  map_0/sign1:
+    type: stop
+    id: 1
+    family: 36h11
+  map_0/sign3:
+    type: yield
+    id: 2
+    family: 36h11
+  map_0/sign1/sign2:
+    type: yield
+    id: 3
+    family: 36h11
