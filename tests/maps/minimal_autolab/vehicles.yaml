@@ -1,0 +1,10 @@
+vehicles:
+  map_0/duckiebot1:
+    configuration: DB18
+    color: green
+  map_0/duckiebot3:
+    configuration: DB19
+    color: red
+  map_0/duckiebot1/duckiebot2:
+    configuration: DB19
+    color: red
