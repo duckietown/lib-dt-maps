@@ -6,10 +6,10 @@ from setuptools import find_packages, setup
 package_name = "dt-maps"
 library_webpage = "https://github.com/duckietown/lib-dt-maps"
 maintainer = "Andrea F. Daniele"
-maintainer_email = "afdaniele@ttic.edu"
-short_description = "Duckietown Maps v2 library"
+maintainer_email = "afdaniele@duckietown.com"
+short_description = "Duckietown Maps library"
 full_description = """
-Duckietown Maps v2 library.
+Duckietown Maps library.
 """
 
 # Read version from the __init__ file
