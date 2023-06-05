@@ -17,14 +17,13 @@ class ColorType(Enum):
 
 
 class VehicleType(Enum):
-    # duckie-bot
+    # duckiebot
     DB18: str = "DB18"
     DB19: str = "DB19"
-    DB20: str = "DB20"
     DB21M: str = "DB21M"
     DB21J: str = "DB21J"
-    DB21R: str = "DB21R"
-    # duckie-drone
+    DBR4: str = "DBR4"
+    # duckiedrone
     DD18: str = "DD18"
     DD21: str = "DD21"
 
