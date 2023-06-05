@@ -63,4 +63,4 @@ class Watchtower(EntityHelper):
 
     @id.setter
     def id(self, value: Optional[str]):
-        self._set_property(ID, Optional[str], value)
+        self._set_property(ID, (type(None), str), value)

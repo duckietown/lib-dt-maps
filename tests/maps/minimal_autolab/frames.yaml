@@ -98,4 +98,39 @@ frames:
         relative_to: map_0/watchtower1
         pose:
             y: 0.9
-  
+    map_0/duckie1:
+        relative_to: map_0
+        pose:
+            x: 1.6
+            y: 1.6
+    map_0/duckie1/duckie2:
+        relative_to: map_0/duckie1
+        pose:
+            y: 0.9  
+    map_0/duckiebot1:
+        relative_to: map_0
+        pose:
+            x: 1.6
+            y: 1.6
+    map_0/duckiebot1/duckiebot2:
+        relative_to: map_0/duckiebot1
+        pose:
+            y: 0.9
+    map_0/sign1:
+        relative_to: map_0
+        pose:
+            x: 1.6
+            y: 1.6
+    map_0/sign1/sign2:
+        relative_to: map_0/sign1
+        pose:
+            y: 0.9
+    map_0/tag1:
+        relative_to: map_0
+        pose:
+            x: 1.6
+            y: 1.6
+    map_0/tag1/tag2:
+        relative_to: map_0/tag1
+        pose:
+            y: 0.9
