@@ -42,19 +42,19 @@ clean:
 
 test: clean
 	mkdir -p  $(tr)
-	DISABLE_CONTRACTS=1 nosetests $(extra) $(coverage)  src  -v -s --nologcapture $(xunitmp)
+	DISABLE_CONTRACTS=1 nose2 -v -s ./src
 
 
 test-parallel: clean
 	mkdir -p  $(tr)
-	DISABLE_CONTRACTS=1 nosetests $(extra) $(coverage) src  -v --nologcapture $(parallel)
+	DISABLE_CONTRACTS=1 nose2 $(extra) $(coverage) src -v --nologcapture $(parallel)
 
 
 test-parallel-circle:
 	DISABLE_CONTRACTS=1 \
 	NODE_TOTAL=$(CIRCLE_NODE_TOTAL) \
 	NODE_INDEX=$(CIRCLE_NODE_INDEX) \
-	nosetests $(coverage) $(xunitmp) src  -v  $(parallel)
+	nose2 $(coverage) $(xunitmp) src  -v  $(parallel)
 
 
 coverage-combine:
