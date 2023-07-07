@@ -1,3 +1,4 @@
+version: 1.0
 citizens:
   map_0/duckie1:
     color: yellow

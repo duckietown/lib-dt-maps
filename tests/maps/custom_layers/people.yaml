@@ -1,3 +1,4 @@
+version: 1.0
 people:
     person_0:
         name: John

@@ -1,3 +1,4 @@
+version: 1.0
 traffic_signs:
   map_0/sign1:
     type: stop
