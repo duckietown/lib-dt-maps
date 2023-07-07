@@ -1,3 +1,4 @@
+import json
 from typing import Type, Union, Any, Iterable, Optional
 
 
@@ -17,6 +18,24 @@ class FieldNotFound(Exception):
         super(FieldNotFound, self).__init__(
             f"Entity {key_info} {layer_info}does not have field '{field}'"
         )
+
+
+class InvalidMapLayer(Exception):
+
+    def __init__(self, layer: str, reason: str, **kwargs):
+        extra: str = ""
+        if kwargs:
+            extra = f"\nExtras:\n{json.dumps(kwargs, indent=4, sort_keys=True)}"
+        super(InvalidMapLayer, self).__init__(f"Layer '{layer}' is not valid. Reason: {reason}.{extra}")
+
+
+class MissingMapLayer(Exception):
+
+    def __init__(self, layer: str, reason: str, **kwargs):
+        extra: str = ""
+        if kwargs:
+            extra = f"\nExtras:\n{json.dumps(kwargs, indent=4, sort_keys=True)}"
+        super(MissingMapLayer, self).__init__(f"Layer '{layer}' does not exist. Reason: {reason}.{extra}")
 
 
 def assert_type(value: Any, types: Union[type, Iterable[type]], field: Optional[str] = None):

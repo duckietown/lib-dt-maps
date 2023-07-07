@@ -18,6 +18,10 @@ class TileType(Enum):
 
 
 class Tile(EntityHelper):
+    LAYER_NAME: str = "tiles"
+
+    def _get_layer_name(self) -> str:
+        return self.LAYER_NAME
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
@@ -25,9 +29,6 @@ class Tile(EntityHelper):
             "j": int,
             "type": str
         }[name]
-
-    def _get_layer_name(self) -> str:
-        return "tiles"
 
     def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
         return {
@@ -52,7 +53,7 @@ class Tile(EntityHelper):
 
     @property
     def frame(self) -> Frame:
-        return Frame.create(self._map, self._key)
+        return Frame.create(self._map, "frames", self._key)
 
     @property
     def i(self) -> int:

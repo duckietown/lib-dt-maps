@@ -15,16 +15,22 @@ from typing import \
     ItemsView,\
     ValuesView
 
-from dt_maps.exceptions import EntityNotFound, FieldNotFound
-from dt_maps.types.commons import EntityHelper
-from dt_maps.types.frames import Frame
-from dt_maps.types.tile_maps import TileMap
-from dt_maps.types.tiles import Tile
-from dt_maps.types.watchtowers import Watchtower
-from dt_maps.types.traffic_signs import TrafficSign
-from dt_maps.types.vehicles import Vehicle
-from dt_maps.types.citizens import Citizen
-from dt_maps.types.ground_tags import GroundTag
+from ..constants import NOTSET
+from ..exceptions import EntityNotFound, FieldNotFound
+from .commons import EntityHelper
+from .frames import Frame
+from .tile_maps import TileMap
+from .tiles import Tile
+from .watchtowers import Watchtower
+from .traffic_signs import TrafficSign
+from .vehicles import Vehicle
+from .citizens import Citizen
+from .ground_tags import GroundTag
+
+DEFAULT_LAYER_VERSION = "1.0"
+
+
+ET = TypeVar("ET", bound=EntityHelper)
 
 
 class MapAsset:
@@ -72,7 +78,7 @@ class MapAsset:
             mode (:obj:`str`):          write mode as in :py:meth:`open`
             data (:obj:`str,bytes`):    asset content to write to disk
         """
-        self._make_dirs()
+        self.make_dirs()
         with open(self._fpath, mode) as fout:
             return fout.write(data)
 
@@ -83,17 +89,14 @@ class MapAsset:
         Args:
             mode (:obj:`str`):   mode as in :py:meth:`open`
         """
-        self._make_dirs()
+        self.make_dirs()
         return open(self._fpath, mode)
 
-    def _make_dirs(self):
+    def make_dirs(self):
         """
         Make directories up to the asset location.
         """
         os.makedirs(os.path.dirname(self._fpath), exist_ok=True)
-
-
-ET = TypeVar("ET", bound=EntityHelper)
 
 
 class MapLayer(Dict[str, ET], Generic[ET]):
@@ -113,12 +116,21 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         map.layers.frames["frame_0"]
     """
 
-    def __init__(self, m, name: str, *args, **kwargs):
+    def __init__(self, m, name: str, version: str = DEFAULT_LAYER_VERSION, **kwargs):
         self._map = m
         self._name: str = name
+        self._version: str = version
         self._ET: Optional[type(ET)] = None
         self._cache: Dict[str, ET] = {}
-        super(MapLayer, self).__init__(*args, **kwargs)
+        super(MapLayer, self).__init__(**kwargs)
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def version(self) -> str:
+        return self._version
 
     def _get_raw(self, key: str) -> dict:
         # get item from underlying dictionary
@@ -133,9 +145,9 @@ class MapLayer(Dict[str, ET], Generic[ET]):
             return self._cache[key]
         # get item from underlying dictionary
         item = self._get_raw(key)
-        # turn 'dict' into 'T'
+        # turn 'dict' into 'ET'
         if self._ET:
-            wrapped = self._ET.create(self._map, key)
+            wrapped = self._ET.create(self._map, self._name, key)
         else:
             wrapped = item
         # cache and return
@@ -180,14 +192,13 @@ class MapLayer(Dict[str, ET], Generic[ET]):
         """
         self._ET = helper_type
 
-    def get(self, key: str) -> Optional[ET]:
-        return self.__getitem__(key)
-
-    def get(self, key: str, default: Any) -> Optional[ET]:
+    def get(self, key: str, default: Any = NOTSET) -> Optional[ET]:
         try:
             return self.__getitem__(key)
-        except (KeyError, EntityNotFound):
-            return default
+        except (KeyError, EntityNotFound) as e:
+            if default is not NOTSET:
+                return default
+            raise e
 
     def items(self) -> ItemsView[str, ET]:
         for key in self.keys():
@@ -233,6 +244,9 @@ class MapLayerNamespace(SimpleNamespace):
 
     def __init__(self, **kwargs):
         super(MapLayerNamespace, self).__init__(**kwargs)
+
+    def set(self, name: str, layer: MapLayer):
+        self.__dict__[name] = layer
 
     def get(self, name: str) -> MapLayer:
         return self.__dict__.get(name)

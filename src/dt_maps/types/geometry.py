@@ -4,6 +4,7 @@ from dt_maps.types.commons import EntityHelper
 
 
 class Pose3D(EntityHelper):
+    LAYER_NAME: str = "frames"
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
@@ -26,7 +27,7 @@ class Pose3D(EntityHelper):
         }[name]
 
     def _get_layer_name(self) -> str:
-        return "frames"
+        return self.LAYER_NAME
 
     @property
     def x(self) -> float:

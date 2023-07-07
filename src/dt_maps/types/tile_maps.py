@@ -4,6 +4,7 @@ from dt_maps.types.commons import EntityHelper
 
 
 class TileSize(EntityHelper):
+    LAYER_NAME: str = "tile_maps"
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
@@ -12,7 +13,7 @@ class TileSize(EntityHelper):
         }[name]
 
     def _get_layer_name(self) -> str:
-        return "tile_maps"
+        return self.LAYER_NAME
 
     def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
         return {
@@ -38,14 +39,15 @@ class TileSize(EntityHelper):
 
 
 class TileMap(EntityHelper):
+    LAYER_NAME: str = "tile_maps"
+
+    def _get_layer_name(self) -> str:
+        return self.LAYER_NAME
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
             "tile_size": dict,
         }[name]
-
-    def _get_layer_name(self) -> str:
-        return "tile_maps"
 
     def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
         return {
@@ -54,4 +56,4 @@ class TileMap(EntityHelper):
 
     @property
     def tile_size(self) -> TileSize:
-        return TileSize.create(self._map, self._key)
+        return TileSize.create(self._map, self.LAYER_NAME, self._key)

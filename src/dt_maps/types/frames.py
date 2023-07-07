@@ -6,6 +6,7 @@ from dt_maps.types.geometry import Pose3D
 
 
 class Frame(EntityHelper):
+    LAYER_NAME: str = "frames"
 
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
@@ -39,7 +40,7 @@ class Frame(EntityHelper):
 
     @property
     def pose(self) -> Pose3D:
-        return Pose3D.create(self._map, self._key)
+        return Pose3D.create(self._map, self.LAYER_NAME, self._key)
 
     @property
     def relative_to(self) -> Optional[str]:

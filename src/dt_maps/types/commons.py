@@ -1,17 +1,26 @@
 from abc import abstractmethod
-from typing import Any, Iterable, Union, Optional
+from typing import Any, Iterable, Union, Optional, Dict, Tuple
 
 from dt_maps.exceptions import FieldNotFound, assert_type
 
 FieldPath = Union[str, Iterable[str]]
 
 
-class EntityHelper:
-    # NOTE: lazy instantiation is needed
-    _cache = None
+MapID = int
+LayerName = str
+EntityKey = str
 
-    def __init__(self, m, key: str, *_, **__):
-        self._map = m
+
+class EntityHelper(Dict):
+    # we store all the entities we make inside this structure so that if we attempt to make another
+    # instance for the same (map, layer, key) pair we simply retrieve the already existing object (if any).
+    #   NOTE: lazy instantiation is needed
+    _instances: Dict[Tuple[MapID, LayerName, EntityKey], 'EntityHelper'] = None
+
+    def __init__(self, map, layer: str, key: str, *_, **__):
+        super().__init__()
+        self._map = map
+        self._layer = layer
         self._key = key
 
     @property
@@ -74,15 +83,15 @@ class EntityHelper:
         return layer.read(self._key, name)
 
     @classmethod
-    def create(cls, m, key: str, *args, **kwargs):
+    def create(cls, map, layer: str, key: str, *args, **kwargs):
         # lazy instantiation
-        if cls._cache is None:
-            cls._cache = {}
+        if cls._instances is None:
+            cls._instances = {}
         # try cache
-        obj = cls._cache.get((id(m), key), None)
+        obj = cls._instances.get((id(map), layer, key), None)
         if obj is None:
             # create new and cache it
-            obj = cls(m, key, *args, **kwargs)
-            cls._cache[(id(m), key)] = obj
+            obj = cls(map, layer, key, *args, **kwargs)
+            cls._instances[(id(map), layer, key)] = obj
         # ---
         return obj

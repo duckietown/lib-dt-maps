@@ -1,4 +1,8 @@
 import os
+import subprocess
+import tempfile
+from typing import Optional
+
 import yaml
 import glob
 import logging
@@ -7,30 +11,32 @@ import networkx as nx
 
 from pathlib import Path
 
-from dt_maps.graph.tile_maps import get_tile_map_graph
-from dt_maps.types import MapAsset, MapLayer
-from dt_maps.types.map import MapLayerNamespace
+from .exceptions import InvalidMapLayer
+from .graph.tile_maps import get_tile_map_graph
+from .types import MapAsset, MapLayer
+from .types.map import MapLayerNamespace
 
-from dt_maps.types.tiles import Tile
-from dt_maps.types.frames import Frame
-from dt_maps.types.tile_maps import TileMap
-from dt_maps.types.watchtowers import Watchtower
-from dt_maps.types.vehicles import Vehicle
-from dt_maps.types.citizens import Citizen
-from dt_maps.types.traffic_signs import TrafficSign
-from dt_maps.types.ground_tags import GroundTag
+from .types.tiles import Tile
+from .types.frames import Frame
+from .types.tile_maps import TileMap
+from .types.watchtowers import Watchtower
+from .types.vehicles import Vehicle
+from .types.citizens import Citizen
+from .types.traffic_signs import TrafficSign
+from .types.ground_tags import GroundTag
 
 logging.basicConfig()
 
 REGISTER = {
     "frames": Frame,
-    "tiles": Tile,
-    "watchtowers": Watchtower,
     "tile_maps": TileMap,
+    "tiles": Tile,
     "citizens": Citizen,
     "vehicles": Vehicle,
     "traffic_signs": TrafficSign,
-    "ground_tags": GroundTag
+    # autolab
+    "watchtowers": Watchtower,
+    "ground_tags": GroundTag,
 }
 
 
@@ -120,7 +126,29 @@ class Map:
         for name, layer in self.layers.items():
             fpath = os.path.join(self._path, f"{name}.yaml")
             with open(fpath, "wt") as fout:
-                yaml.safe_dump({name: layer.as_raw_dict()}, fout)
+                yaml.safe_dump({
+                    "version": layer.version,
+                    name: layer.as_raw_dict()
+                }, fout)
+
+    def make_context(self, fpath: Optional[str] = None) -> str:
+        """
+        Compresses all map layers and assets into a ZIP file.
+
+        Args:
+            fpath (float):  Path to the ZIP file to create. Defaults to a temporary file.
+
+        Returns:
+            str: Path to the ZIP file containing the context.
+
+        """
+        context_fpath: str = fpath
+        if context_fpath is None:
+            context_fpath = tempfile.NamedTemporaryFile(suffix='.zip').name
+        subprocess.check_output([
+            "zip", "-b", "/tmp", "-x", "renderer_authentication.*", "-r", context_fpath, "."
+        ], cwd=self._path)
+        return context_fpath
 
     @classmethod
     def from_disk(cls, name: str, map_dir: str) -> 'Map':
@@ -148,15 +176,19 @@ class Map:
             if layer_name == "main":
                 continue
             with open(layer_fpath, "rt") as fin:
-                try:
-                    layer_content = yaml.safe_load(fin)[layer_name]
-                except KeyError:
-                    raise RuntimeError(f"The layer file '{layer_fpath}' does not have "
-                                       f"'{layer_name}' as key to the root object.")
+                layer_content = yaml.safe_load(fin)
+                if "version" not in layer_content:
+                    raise InvalidMapLayer(layer_name, f"File '{layer_fpath}' does not have the "
+                                                      f"field 'version'")
+                layer_version: str = layer_content["version"]
+                if layer_name not in layer_content:
+                    raise InvalidMapLayer(layer_name, f"File '{layer_fpath}' does not have the "
+                                                      f"root key '{layer}'")
+                layer_objects = layer_content[layer_name]
                 # turn raw dict into a MapLayer object
-                layer = MapLayer(m, layer_name, layer_content)
+                layer = MapLayer(m, layer_name, layer_version, **layer_objects)
                 # populate map
-                m._layers.__dict__[layer_name] = layer
+                m.layers.set(layer_name, layer)
 
         # register type converters for known layers
         register = lambda l, t: m.layers.get(l).register_entity_helper(t) if m.layers.has(l) else 0

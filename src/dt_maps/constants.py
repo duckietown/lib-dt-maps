@@ -2,6 +2,7 @@ from collections import namedtuple
 
 Tape = namedtuple('Tape', ['width', 'color'])
 
+NOTSET = object()
 
 WHITE_TAPE = Tape(0.048, [255, 255, 255])
 YELLOW_TAPE = Tape(0.024, [255, 255, 0])

@@ -47,7 +47,7 @@ class Watchtower(EntityHelper):
 
     @property
     def frame(self) -> Frame:
-        return Frame.create(self._map, self._key)
+        return Frame.create(self._map, "frames", self._key)
 
     @property
     def configuration(self) -> WatchtowerType:

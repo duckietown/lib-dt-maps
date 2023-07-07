@@ -15,6 +15,7 @@ class CitizenType(Enum):
 
 
 class Citizen(EntityHelper):
+    LAYER_NAME: str = "citizens"
 
     def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
         return {
@@ -27,7 +28,7 @@ class Citizen(EntityHelper):
         }[name]
 
     def _get_layer_name(self) -> str:
-        return "citizens"
+        return self.LAYER_NAME
 
     def _set_property(self, name: FieldPath, types: Union[type, Iterable[type]], value: Any):
         # CitizenType -> str
@@ -46,7 +47,7 @@ class Citizen(EntityHelper):
 
     @property
     def frame(self) -> Frame:
-        return Frame.create(self._map, self._key)
+        return Frame.create(self._map, self.LAYER_NAME, self._key)
 
     @property
     def color(self) -> CitizenType:
