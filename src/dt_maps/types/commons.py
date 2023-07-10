@@ -19,7 +19,8 @@ class EntityHelper(Dict):
 
     def __init__(self, map, layer: str, key: str, *_, **__):
         super().__init__()
-        self._map = map
+        from dt_maps import Map
+        self._map: Map = map
         self._layer = layer
         self._key = key
 

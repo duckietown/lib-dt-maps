@@ -42,4 +42,4 @@ def get_tile_map_graph(m: Map, tile_map: TileMap, subdivision_steps: int = 0) ->
 def get_tile_map_tiles(m: Map, tile_map: str) -> Iterable[TileCoordinates]:
     for tile_key, tile in m.layers.tiles.items():
         if tile_key.startswith(tile_map):
-            yield tile["i"], tile["j"]
+            yield tile.i, tile.j

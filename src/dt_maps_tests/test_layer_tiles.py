@@ -43,16 +43,12 @@ def test_tiles_set_setitem():
     m = _load_map()
     tile = "map_0/tile_0_1"
     test_tiles_map_0_tile_0_1()
-    m.layers.tiles[tile]["i"] = 2
-    m.layers.tiles[tile]["j"] = 3
     m.layers.tiles[tile]["type"] = TileType.CURVE
     try:
         test_tiles_map_0_tile_0_1()
         assert False
     except AssertionError:
         pass
-    assert m.layers.tiles[tile]["i"] == 2
-    assert m.layers.tiles[tile]["j"] == 3
     assert m.layers.tiles[tile]["type"] == TileType.CURVE
 
 

@@ -11,7 +11,8 @@ class Frame(EntityHelper):
     def _get_property_types(self, name: str) -> Union[type, Iterable[type]]:
         return {
             "pose": dict,
-            "relative_to": str
+            "relative_to": str,
+            "unit": str,
         }[name]
 
     def _get_layer_name(self) -> str:
@@ -20,7 +21,8 @@ class Frame(EntityHelper):
     def _get_property_values(self, name: str) -> Optional[Iterable[Any]]:
         return {
             "pose": None,
-            "relative_to": None
+            "relative_to": None,
+            "unit": [None, "meters", "tiles"],
         }[name]
 
     @property
@@ -49,3 +51,7 @@ class Frame(EntityHelper):
     @relative_to.setter
     def relative_to(self, value: Optional[str]):
         self._set_property("relative_to", (str, None), value)
+
+    @property
+    def unit(self) -> Optional[str]:
+        return self._get_property("unit")
