@@ -22,7 +22,7 @@ class VehicleType(Enum):
     DB19: str = "DB19"
     DB21M: str = "DB21M"
     DB21J: str = "DB21J"
-    DBR4: str = "DBR4"
+    DBR: str = "DBR"
     # duckiedrone
     DD18: str = "DD18"
     DD21: str = "DD21"
